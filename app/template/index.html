@@ -1,1 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>
+    html, body {width: 100%;height: 100%;margin: 0;padding: 0;}
+    #map {position:absolute;top:0;bottom:0;right:0;left:0;}
+    </style>
+    <script src="https://gist.githubusercontent.com/alfredotranchedone/72326145ecff5d7d7233/raw/cd15f68b813fcb483273956b6d69fc1157608738/L.TileLayer.BetterWMS.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map{
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+</head>
+<body>
+    <!-- map section -->
+<div id="map"></div> 
+<script type="text/javascript">
+var map = L.map('map', {
+    center: [36.82189, 10.168969],
+    zoom: 8
+    });
+    var option;
+            option = {
+                user: "admin",
+                password: "geoserver",
+                url: 'http://igeomedia.com:8080/geoserver/manel_workspace/wms',
+                success: function () {
+                    alert("Login OK!");
+                },
+                failure: function () {
+                    alert("Login fail!");
+                }};
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+L.control.scale({metric: true,imperial: false,position: 'topright',}).addTo(map);
+    // add layers //
+var ccc_map =L.tileLayer.wms('http://igeomedia.com:8080/geoserver/manel_workspace/wms', {
+        layers: 'CCC_Bizerte',
+        format: 'image/png',
+        transparent: true,});
+ccc_map.addTo(map);
+var ccl_map =L.tileLayer.wms('http://igeomedia.com:8080/geoserver/manel_workspace/wms', {
+        layers: 'CCL_Bizerte',
+        format: 'image/png',
+        transparent: true,});
+ccl_map.addTo(map);
+var adm_biz =L.tileLayer.wms('http://igeomedia.com:8080/geoserver/manel_workspace/wms', {
+    layers: 'bizerte',
+    format: 'image/png',
+    transparent: true,});
+adm_biz.addTo(map);
+// switch layers //
+var baseMaps = {
+    'centre de collecte du lait':ccl_map,
+    'centre de collecte des céreales':ccc_map,
+    'limte administrative':adm_biz,
+};
+var study_area = L.layerGroup([ccc_map,ccl_map,adm_biz]);
+var overlayMaps = {"adm_biz/ccl_map": study_area};
+L.control.layers(baseMaps, overlayMaps).addTo(map); 
 
+</script>
+</body>
+</html>
